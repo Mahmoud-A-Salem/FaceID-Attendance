@@ -1,0 +1,48 @@
+﻿@using NewFaceIDAttendance.ViewModels
+@model StudentViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Add Student</h2>
+
+<form method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">University ID</label>
+        @Html.TextBoxFor(m => m.UniversityID, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Phone</label>
+        @Html.TextBoxFor(m => m.Phone, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Department</label>
+        @Html.TextBoxFor(m => m.Department, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Year Level</label>
+        @Html.TextBoxFor(m => m.YearLevel, new { @class = "form-control", type = "number" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Face Image</label>
+        <input type="file" name="FaceImageFile" class="form-control" />
+    </div>
+
+    <button class="btn btn-success">Save</button>
+
+</form>

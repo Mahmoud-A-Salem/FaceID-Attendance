@@ -1,0 +1,62 @@
+﻿@model NewFaceIDAttendance.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white text-center">
+                <h4>Login</h4>
+            </div>
+            <div class="card-body">
+                @* عرض أي Errors *@
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                    </div>
+                }
+
+                <form action="/Home/Index" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="mb-3">
+                        <label for="Email" class="form-label">Email</label>
+                        <input type="email"
+                               id="Email"
+                               name="Email"
+                               class="form-control"
+                               placeholder="Enter your email"
+                               value="@Model?.Email" />
+                        @if (ViewData.ModelState["Email"]?.Errors?.Count > 0)
+                        {
+                            <span class="text-danger">@ViewData.ModelState["Email"].Errors[0].ErrorMessage</span>
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="Password" class="form-label">Password</label>
+                        <input type="password"
+                               id="Password"
+                               name="Password"
+                               class="form-control"
+                               placeholder="Enter your password"
+                               value="@Model?.Password" />
+                        @if (ViewData.ModelState["Password"]?.Errors?.Count > 0)
+                        {
+                            <span class="text-danger">@ViewData.ModelState["Password"].Errors[0].ErrorMessage</span>
+                        }
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

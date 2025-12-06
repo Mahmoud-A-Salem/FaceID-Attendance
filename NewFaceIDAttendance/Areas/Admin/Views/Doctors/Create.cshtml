@@ -1,0 +1,33 @@
+﻿@using NewFaceIDAttendance.ViewModels
+@model DoctorViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Add Doctor</h2>
+
+<form method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Password</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Department</label>
+        @Html.TextBoxFor(m => m.Department, new { @class = "form-control" })
+    </div>
+
+    <button class="btn btn-success">Save</button>
+
+</form>

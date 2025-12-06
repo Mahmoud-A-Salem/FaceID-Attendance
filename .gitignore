@@ -1,0 +1,64 @@
+########################################
+# .NET 8 + VS Code + Visual Studio
+########################################
+
+# Build output
+bin/
+obj/
+out/
+
+# VS Code settings (ignore personal stuff, keep shared configs if needed)
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Visual Studio
+.vs/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs & temp files
+*.log
+*.tlog
+*.tmp
+*.pidb
+*.svclog
+*.pdb
+
+# Test results
+TestResult*/
+*.VisualState.xml
+*.nunit.xml
+
+# NuGet packages
+*.nupkg
+*.snupkg
+# Ignore packages folder but allow build props
+**/packages/*
+!**/packages/build/
+
+# Azure build artifacts
+csx/
+*.build.csdef
+
+# Code coverage
+*.coverage
+*.coveragexml
+
+# Node.js modules (if using JS/TS in project)
+node_modules/
+
+# Secrets & environment variables
+.env
+.env.*
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+appsettings*.json

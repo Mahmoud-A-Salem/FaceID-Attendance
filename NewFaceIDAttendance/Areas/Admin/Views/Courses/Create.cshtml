@@ -1,0 +1,37 @@
+﻿@using NewFaceIDAttendance.ViewModels
+@model CourseViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-3">Add Course</h2>
+
+<form method="post">
+
+    <div class="mb-3">
+        <label class="form-label">Course Name</label>
+        @Html.TextBoxFor(m => m.CourseName, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Course Code</label>
+        @Html.TextBoxFor(m => m.CourseCode, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Year Level</label>
+        @Html.TextBoxFor(m => m.YearLevel, new { @class = "form-control", type = "number" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Doctor</label>
+        @Html.DropDownListFor(
+        m => m.DoctorID,
+                Model.Doctors,
+                "Select Doctor",
+                new { @class = "form-control" }
+                )
+    </div>
+
+    <button class="btn btn-success">Save</button>
+</form>

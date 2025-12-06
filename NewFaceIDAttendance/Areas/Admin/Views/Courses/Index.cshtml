@@ -1,0 +1,35 @@
+﻿@using NewFaceIDAttendance.Models
+@model IEnumerable<Course>
+@{
+    Layout = "_AdminLayout";
+}
+
+<h3>Courses</h3>
+<a class="btn btn-primary mb-3" asp-action="Create">Add New Course</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Course Name</th>
+            <th>Course Code</th>
+            <th>Doctor</th>
+            <th>Year Level</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.CourseName</td>
+                <td>@course.CourseCode</td>
+                <td>@course.Doctor.FullName</td>
+                <td>@course.YearLevel</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@course.CourseId">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@course.CourseId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

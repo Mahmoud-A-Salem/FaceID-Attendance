@@ -58,13 +58,13 @@ public class HomeController : Controller
                 var doctor = _context.Doctors.FirstOrDefault(d => d.Email == user.Email);
                 if (doctor != null)
                     HttpContext.Session.SetInt32("DoctorID", doctor.DoctorId);
-                return RedirectToAction("Index", "Home", new { area = "Doctor" });
+                return RedirectToAction("Index", "Courses", new { area = "Admin" });
             case "Student":
                 // الحصول على StudentID إذا موجود
                 var student = _context.Students.FirstOrDefault(s => s.Email == user.Email);
                 if (student != null)
                     HttpContext.Session.SetInt32("StudentID", student.StudentId);
-                return RedirectToAction("Index", "Home", new { area = "Student" });
+                return RedirectToAction("Index", "Courses", new { area = "Admin" });
             default:
                 ModelState.AddModelError("", "Invalid role.");
                 return View(model);

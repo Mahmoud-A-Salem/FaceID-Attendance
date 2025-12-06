@@ -2,7 +2,8 @@
 using NewFaceIDAttendance.Data;
 using NewFaceIDAttendance.Models;
 
-namespace YourProject.Areas.Admin.Controllers
+
+namespace NewFaceIDAttendance.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class DoctorsController : Controller
@@ -17,12 +18,12 @@ namespace YourProject.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var doctors = _context.Doctors.ToList();
-            return View("Admin/Views/Doctors/Index", doctors);
+            return View(doctors);
         }
 
         public IActionResult Create()
         {
-            return View("Admin/Views/Doctors/Create");
+            return View();
         }
 
         [HttpPost]

@@ -23,13 +23,73 @@
             <tr>
                 <td>@course.CourseName</td>
                 <td>@course.CourseCode</td>
-                <td>@course.Doctor.FullName</td>
+                <td>@(course.Doctor?.FullName ?? "No Doctor Assigned")</td>
                 <td>@course.YearLevel</td>
                 <td>
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@course.CourseId">Edit</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@course.CourseId">Delete</a>
+                    <button class="btn btn-sm btn-warning" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#editModal"
+                            onclick="setEditModal('@Url.Action("Edit", "Courses", new { id = course.CourseId })', '@course.CourseName')">
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal"
+                            onclick="setDeleteModal('@Url.Action("Delete", "Courses", new { id = course.CourseId })', '@course.CourseName')">
+                        Delete
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Edit</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to edit course <strong id="editName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="btnConfirmEdit" href="#" class="btn btn-primary">Yes, Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete course <strong id="deleteName"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a id="btnConfirmDelete" href="#" class="btn btn-danger">Yes, Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setEditModal(url, name) {
+        document.getElementById('editName').innerText = name;
+        document.getElementById('btnConfirmEdit').href = url;
+    }
+    
+    function setDeleteModal(url, name) {
+        document.getElementById('deleteName').innerText = name;
+        document.getElementById('btnConfirmDelete').href = url;
+    }
+</script>

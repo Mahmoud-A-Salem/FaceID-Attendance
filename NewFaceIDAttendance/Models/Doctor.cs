@@ -11,8 +11,6 @@ public partial class Doctor
 
     public string Email { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
-
     public string? Department { get; set; }
 
     public DateTime? CreatedAt { get; set; }

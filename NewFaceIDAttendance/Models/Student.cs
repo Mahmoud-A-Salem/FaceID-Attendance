@@ -20,8 +20,6 @@ public partial class Student
 
     public DateTime? CreatedAt { get; set; }
 
-    public string? ImagePath { get; set; }
-
     public virtual ICollection<Attendance> Attendances { get; set; } = new List<Attendance>();
 
     public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();

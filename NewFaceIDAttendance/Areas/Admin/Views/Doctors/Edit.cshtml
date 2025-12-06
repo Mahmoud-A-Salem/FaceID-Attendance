@@ -1,12 +1,13 @@
-﻿@using NewFaceIDAttendance.ViewModels
-@model DoctorViewModel
+@using NewFaceIDAttendance.Models
+@model Doctor
 @{
     Layout = "_AdminLayout";
 }
 
-<h2 class="mb-3">Add Doctor</h2>
+<h2 class="mb-3">Edit Doctor</h2>
 
 <form method="post">
+    @Html.HiddenFor(m => m.DoctorId)
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="mb-3">
@@ -20,31 +21,27 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label">Password</label>
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-    </div>
-
-    <div class="mb-3">
         <label class="form-label">Department</label>
         @Html.TextBoxFor(m => m.Department, new { @class = "form-control" })
     </div>
 
-    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#saveModal">Save</button>
+    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateModal">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 
-    <!-- Save Modal -->
-    <div class="modal fade" id="saveModal" tabindex="-1">
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirm Save</h5>
+                    <h5 class="modal-title">Confirm Update</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to save this doctor?
+                    Are you sure you want to update this doctor?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Yes, Save</button>
+                    <button type="submit" class="btn btn-primary">Yes, Update</button>
                 </div>
             </div>
         </div>

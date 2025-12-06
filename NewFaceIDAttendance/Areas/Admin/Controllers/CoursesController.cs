@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NewFaceIDAttendance.Data;
 using NewFaceIDAttendance.Models;
 
-namespace YourProject.Areas.Admin.Controllers
+
+namespace NewFaceIDAttendance.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class CoursesController : Controller
@@ -17,13 +19,13 @@ namespace YourProject.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            var courses = _context.Courses.ToList();
+            var courses = _context.Courses.Include(c => c.Doctor).ToList();
             return View(courses);
         }
 
         public IActionResult Create()
         {
-            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorID", "FullName");
+            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorId", "FullName");
             return View();
         }
 
@@ -36,7 +38,7 @@ namespace YourProject.Areas.Admin.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorID", "FullName", course.DoctorId);
+            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorId", "FullName", course.DoctorId);
             return View(course);
         }
 
@@ -45,7 +47,7 @@ namespace YourProject.Areas.Admin.Controllers
             var course = _context.Courses.Find(id);
             if (course == null) return NotFound();
 
-            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorID", "FullName", course.DoctorId);
+            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorId", "FullName", course.DoctorId);
             return View(course);
         }
 
@@ -58,7 +60,7 @@ namespace YourProject.Areas.Admin.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorID", "FullName", course.DoctorId);
+            ViewBag.Doctors = new SelectList(_context.Doctors, "DoctorId", "FullName", course.DoctorId);
             return View(course);
         }
 

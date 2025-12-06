@@ -9,11 +9,11 @@ namespace NewFaceIDAttendance.ViewModels
 
         [Required]
         [StringLength(100)]
-        public string CourseName { get; set; }
+        public string? CourseName { get; set; }
 
         [Required]
         [StringLength(20)]
-        public string CourseCode { get; set; }
+        public string? CourseCode { get; set; }
 
         public int? DoctorID { get; set; } // Optional
 
@@ -22,6 +22,6 @@ namespace NewFaceIDAttendance.ViewModels
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         // Dropdown
-        public IEnumerable<SelectListItem> Doctors { get; set; }
+        public IEnumerable<SelectListItem>? Doctors { get; set; }
     }
 }

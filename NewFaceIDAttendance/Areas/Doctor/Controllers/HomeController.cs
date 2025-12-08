@@ -126,5 +126,46 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> MyCourses()
+        {
+            var doctorId = HttpContext.Session.GetInt32("DoctorID");
+            if (doctorId == null) return RedirectToAction("Index", "Home", new { area = "" });
+
+            var courses = await _context.Courses
+                .Include(c => c.StudentCourses)
+                .Where(c => c.DoctorId == doctorId)
+                .ToListAsync();
+
+            return View(courses);
+        }
+
+        public async Task<IActionResult> Students()
+        {
+            var doctorId = HttpContext.Session.GetInt32("DoctorID");
+            if (doctorId == null) return RedirectToAction("Index", "Home", new { area = "" });
+
+            // Fetch distinct students enrolled in ANY of this doctor's courses
+            // And maybe calculate some aggregate stats if needed, or just list them.
+            // For now, let's just list them.
+            
+            var doctorCourses = await _context.Courses
+                .Where(c => c.DoctorId == doctorId)
+                .Select(c => c.CourseId)
+                .ToListAsync();
+
+            var students = await _context.StudentCourses
+                .Include(SC => SC.Student)
+                .Where(sc => sc.CourseId.HasValue && doctorCourses.Contains(sc.CourseId.Value))
+                .Select(sc => sc.Student)
+                .Distinct()
+                .ToListAsync();
+
+            // Optionally, we could wrap this in a ViewModel if we want to show which courses they are in, etc.
+            // But for a simple list, passing the Student model list is fine, or a simple VM.
+            // Let's stick to the Student model for simplicity unless more is requested.
+
+            return View(students);
+        }
     }
 }

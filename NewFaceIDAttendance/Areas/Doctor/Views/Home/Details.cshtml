@@ -4,10 +4,20 @@
     ViewData["Title"] = @Model.CourseName;
 }
 
-<div class="row mb-4 align-items-center">
-    <div class="col-md-8">
+<div class="row mb-4">
+    <div class="col-12">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb mb-1">
+                <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@Model.CourseCode</li>
+            </ol>
+        </nav>
+        <h2 class="fw-bold text-dark">@Model.CourseName (@Model.CourseCode)</h2>
+    </div>
+</div>
+
+<div class="row mb-4 g-3">
+    <div class="col-md-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase mb-2">Total Students</h6>
@@ -15,7 +25,7 @@
             </div>
         </div>
     </div>
-     <div class="col-md-6 col-lg-3">
+    <div class="col-md-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase mb-2">Total Sessions</h6>
@@ -23,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6 col-lg-3">
+    <div class="col-md-4">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-body">
                 <h6 class="text-muted text-uppercase mb-2">Average Attendance</h6>

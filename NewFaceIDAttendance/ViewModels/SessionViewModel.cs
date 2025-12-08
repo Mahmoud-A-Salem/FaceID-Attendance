@@ -14,6 +14,8 @@ namespace NewFaceIDAttendance.ViewModels
 
         [Required(ErrorMessage = "Start time is required")]
         [Display(Name = "Start Time")]
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime StartTime { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "Duration is required")]

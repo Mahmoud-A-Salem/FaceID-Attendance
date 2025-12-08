@@ -15,7 +15,6 @@ namespace NewFaceIDAttendance.ViewModels
         [StringLength(100)]
         public string Email { get; set; }
 
-        [Required]
         public string Password { get; set; }  // هيتحول لـ Hash قبل التخزين
 
         [StringLength(50)]

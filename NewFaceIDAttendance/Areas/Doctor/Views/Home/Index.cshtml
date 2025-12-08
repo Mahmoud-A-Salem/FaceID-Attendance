@@ -1,0 +1,103 @@
+@model NewFaceIDAttendance.Areas.Doctor.ViewModels.DoctorDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold text-dark">Welcome back, Dr. @Model.DoctorName</h2>
+        <p class="text-muted">Here is an overview of your assigned courses and student activities.</p>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row g-4 mb-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom h-100 bg-primary text-white">
+            <div class="card-body d-flex align-items-center">
+                <div class="display-4 me-3"><i class="fas fa-book-open"></i></div>
+                <div>
+                    <h5 class="card-title mb-0">Total Courses</h5>
+                    <p class="card-text fs-4 fw-bold">@Model.TotalCourses</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom h-100 bg-success text-white">
+            <div class="card-body d-flex align-items-center">
+                <div class="display-4 me-3"><i class="fas fa-user-graduate"></i></div>
+                <div>
+                    <h5 class="card-title mb-0">Total Students</h5>
+                    <p class="card-text fs-4 fw-bold">@Model.TotalStudents</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Placeholder for Notification or future stat -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom h-100 bg-warning text-dark">
+            <div class="card-body d-flex align-items-center">
+                <div class="display-4 me-3"><i class="fas fa-clock"></i></div>
+                <div>
+                    <h5 class="card-title mb-0">Pending Actions</h5>
+                    <p class="card-text fs-4 fw-bold">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Courses List -->
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white border-bottom-0 py-3">
+                <h5 class="mb-0 fw-bold text-primary"><i class="fas fa-list me-2"></i>Assigned Courses</h5>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="ps-4">Course Code</th>
+                            <th>Course Name</th>
+                            <th class="text-center">Enrolled Students</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.AssignedCourses.Any())
+                        {
+                            foreach (var course in Model.AssignedCourses)
+                            {
+                                <tr>
+                                    <td class="ps-4 fw-bold">@course.CourseCode</td>
+                                    <td>@course.CourseName</td>
+                                    <td class="text-center">
+                                        <span class="badge bg-info text-dark rounded-pill">
+                                            @(course.StudentCourses?.Count ?? 0)
+                                        </span>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <a href="@Url.Action("Details", "Home", new { id = course.CourseId })" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> View Details
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    No courses assigned yet.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

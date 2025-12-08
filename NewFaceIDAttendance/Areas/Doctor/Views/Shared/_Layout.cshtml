@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Doctor Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card-custom {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .card-custom:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg mb-4">
+        <div class="container">
+            <a class="navbar-brand">
+                <i class="fas fa-user-md me-2"></i>Doctor Panel
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                    <a class="nav-link" asp-area="Doctor" asp-controller="Home" asp-action="Index">
+                        <i class="fas fa-home me-1"></i>Dashboard
+                    </a>
+                    <a class="nav-link" asp-area="Doctor" asp-controller="Sessions" asp-action="Index">
+                        <i class="fas fa-clock me-1"></i>Sessions
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-book me-1"></i>My Courses
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-users me-1"></i>Students
+                    </a>
+                </div>
+                <div class="navbar-nav ms-auto">
+                    <span class="navbar-text text-light me-3">
+                        Welcome, <strong>@Context.Session.GetString("Email")</strong>
+                    </span>
+                    <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Logout">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mb-5">
+        @RenderBody()
+    </div>
+
+    <footer class="border-top footer text-muted mt-auto py-3 bg-light fixed-bottom">
+        <div class="container text-center">
+            &copy; 2025 - FaceID Attendance System - Doctor Panel
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

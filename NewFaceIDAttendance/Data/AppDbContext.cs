@@ -27,6 +27,8 @@ public partial class AppDbContext : DbContext
 
     public DbSet<StudentCourse> StudentCourses { get; set; }
 
+    public DbSet<Session> Sessions { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Attendance>(entity =>
@@ -43,6 +45,7 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.FaceRecognized).HasDefaultValue(false);
             entity.Property(e => e.Status).HasMaxLength(10);
             entity.Property(e => e.StudentId).HasColumnName("StudentID");
+            entity.Property(e => e.SessionId).HasColumnName("SessionID");
 
             entity.HasOne(d => d.Course).WithMany(p => p.Attendances)
                 .HasForeignKey(d => d.CourseId)
@@ -51,6 +54,10 @@ public partial class AppDbContext : DbContext
             entity.HasOne(d => d.Student).WithMany(p => p.Attendances)
                 .HasForeignKey(d => d.StudentId)
                 .HasConstraintName("FK__Attendanc__Stude__47DBAE45");
+
+            entity.HasOne(d => d.Session).WithMany(p => p.Attendances)
+                .HasForeignKey(d => d.SessionId)
+                .HasConstraintName("FK_Attendance_Session");
         });
 
         modelBuilder.Entity<Course>(entity =>
@@ -156,6 +163,32 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Role)
                 .IsRequired()
                 .HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<Session>(entity =>
+        {
+            entity.HasKey(e => e.SessionId).HasName("PK__Sessions");
+
+            entity.ToTable("Sessions");
+
+            entity.Property(e => e.SessionId).HasColumnName("SessionID");
+            entity.Property(e => e.CourseId).HasColumnName("CourseID");
+            entity.Property(e => e.SessionName).HasMaxLength(100);
+            entity.Property(e => e.SessionToken).HasMaxLength(255);
+            entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.Course)
+                .WithMany(p => p.Sessions)
+                .HasForeignKey(d => d.CourseId)
+                .HasConstraintName("FK_Sessions_Course");
+
+            entity.HasOne(d => d.Creator)
+                .WithMany()
+                .HasForeignKey(d => d.CreatedBy)
+                .HasConstraintName("FK_Sessions_Doctor");
         });
 
         OnModelCreatingPartial(modelBuilder);

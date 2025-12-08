@@ -1,0 +1,96 @@
+@model NewFaceIDAttendance.ViewModels.EditSessionViewModel
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit Session";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Session
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="SessionId" />
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="CourseId" class="form-label">
+                                <i class="fas fa-book me-1"></i>Course
+                            </label>
+                            <select asp-for="CourseId" asp-items="Model.Courses" class="form-select" disabled>
+                            </select>
+                            <input type="hidden" asp-for="CourseId" />
+                            <small class="form-text text-muted">Course cannot be changed</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SessionName" class="form-label">
+                                <i class="fas fa-tag me-1"></i>Session Name
+                            </label>
+                            <input asp-for="SessionName" class="form-control" />
+                            <span asp-validation-for="SessionName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartTime" class="form-label">
+                                    <i class="fas fa-calendar-alt me-1"></i>Start Time
+                                </label>
+                                <input asp-for="StartTime" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ExpiryTime" class="form-label">
+                                    <i class="fas fa-calendar-times me-1"></i>Expiry Time
+                                </label>
+                                <input asp-for="ExpiryTime" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="ExpiryTime" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" />
+                            <label asp-for="IsActive" class="form-check-label">
+                                <i class="fas fa-toggle-on me-1"></i>Session is Active
+                            </label>
+                            <div class="form-text">
+                                Deactivate to prevent students from joining even within the time window
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="fas fa-save me-1"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Format datetime for input fields
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
+                if (input.value) {
+                    const date = new Date(input.value);
+                    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+                    input.value = date.toISOString().slice(0, 16);
+                }
+            });
+        });
+    </script>
+}

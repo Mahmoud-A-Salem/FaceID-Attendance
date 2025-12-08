@@ -1,5 +1,5 @@
-@using NewFaceIDAttendance.Models
-@model Doctor
+@using NewFaceIDAttendance.ViewModels
+@model DoctorViewModel
 @{
     Layout = "_AdminLayout";
 }
@@ -7,7 +7,7 @@
 <h2 class="mb-3">Edit Doctor</h2>
 
 <form method="post">
-    @Html.HiddenFor(m => m.DoctorId)
+    @Html.HiddenFor(m => m.DoctorID)
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="mb-3">
@@ -18,6 +18,11 @@
     <div class="mb-3">
         <label class="form-label">Email</label>
         @Html.TextBoxFor(m => m.Email, new { @class = "form-control", type = "email" })
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">New Password (Optional)</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Leave blank to keep current" })
     </div>
 
     <div class="mb-3">

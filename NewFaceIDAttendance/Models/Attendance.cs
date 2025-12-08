@@ -16,7 +16,11 @@ public partial class Attendance
 
     public DateTime? CreatedAt { get; set; }
 
+    public int? SessionId { get; set; }
+
     public virtual Course? Course { get; set; }
 
     public virtual Student? Student { get; set; }
+
+    public virtual Session? Session { get; set; }
 }

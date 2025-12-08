@@ -22,7 +22,7 @@ public class HomeController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        string password = "Admin123";
+        string password = "12345";
 
         // عمل hash
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(password);
@@ -37,7 +37,20 @@ public class HomeController : Controller
         }
 
         // التحقق من كلمة المرور
-        if (!BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+        bool isPasswordValid = false;
+        try
+        {
+            isPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
+        }
+        catch (BCrypt.Net.SaltParseException)
+        {
+            // Handle invalid salt (e.g., plain text improperly stored as hash)
+            // You might want to log this error
+            ModelState.AddModelError("", "Stored password hash is invalid.");
+            return View(model);
+        }
+
+        if (!isPasswordValid)
         {
             ModelState.AddModelError("", "Invalid password.");
             return View(model);
@@ -58,13 +71,13 @@ public class HomeController : Controller
                 var doctor = _context.Doctors.FirstOrDefault(d => d.Email == user.Email);
                 if (doctor != null)
                     HttpContext.Session.SetInt32("DoctorID", doctor.DoctorId);
-                return RedirectToAction("Index", "Courses", new { area = "Admin" });
+                return RedirectToAction("Index", "Home", new { area = "Doctor" });
             case "Student":
                 // الحصول على StudentID إذا موجود
                 var student = _context.Students.FirstOrDefault(s => s.Email == user.Email);
                 if (student != null)
                     HttpContext.Session.SetInt32("StudentID", student.StudentId);
-                return RedirectToAction("Index", "Courses", new { area = "Admin" });
+                return RedirectToAction("Index", "Home", new { area = "Student" });
             default:
                 ModelState.AddModelError("", "Invalid role.");
                 return View(model);

@@ -1,0 +1,191 @@
+@{
+    ViewData["Title"] = "Join Session";
+    var session = ViewBag.Session as NewFaceIDAttendance.Models.Session;
+    var student = ViewBag.Student as NewFaceIDAttendance.Models.Student;
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-hand-paper me-2"></i>Mark Your Attendance
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Session Details</strong>
+                    </div>
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <strong>Error:</strong> @TempData["Error"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (TempData["Warning"] != null)
+                    {
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <strong>Warning:</strong> @TempData["Warning"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <strong>Course:</strong>
+                        <p class="mb-1">
+                            <span class="badge bg-primary">@session.Course.CourseCode</span>
+                            @session.Course.CourseName
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Session:</strong>
+                        <p class="mb-1">@session.SessionName</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Doctor:</strong>
+                        <p class="mb-1">@(session.Course.Doctor?.FullName ?? "N/A")</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Time Window:</strong>
+                        <p class="mb-1">
+                            @session.StartTime.ToString("MMM dd, yyyy hh:mm tt") - 
+                            @session.ExpiryTime.ToString("hh:mm tt")
+                        </p>
+                    </div>
+
+                    <hr/>
+
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Please confirm</strong> that you are <strong>@student.FullName</strong> attending this session.
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 text-center">
+                            <h5>Camera Preview</h5>
+                            <div class="position-relative d-inline-block">
+                                <video id="video" width="320" height="240" autoplay class="border rounded"></video>
+                                <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+                                <div id="loadingCamera" class="position-absolute top-50 start-50 translate-middle">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" id="startCameraBtn" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-camera me-2"></i>Start Camera
+                                </button>
+                                <button type="button" id="captureBtn" class="btn btn-warning btn-sm" disabled>
+                                    <i class="fas fa-camera-retro me-2"></i>Capture Photo
+                                </button>
+                                <button type="button" id="retakeBtn" class="btn btn-secondary btn-sm" style="display:none;">
+                                    <i class="fas fa-redo me-2"></i>Retake
+                                </button>
+                            </div>
+                            <small class="text-muted d-block mt-1" id="statusMsg">Please allow camera access.</small>
+                            <img id="capturedImagePreview" style="display:none; width:320px; height:240px;" class="border rounded mx-auto mt-2" />
+                        </div>
+                    </div>
+
+                    <form asp-action="MarkAttendance" asp-controller="Attendance" method="post" id="attendanceForm">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="sessionId" value="@session.SessionId" />
+                        <input type="hidden" name="capturedImage" id="capturedImageInput" />
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg" id="submitBtn" disabled>
+                                <i class="fas fa-check-circle me-2"></i>Confirm Attendance
+                            </button>
+                            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+
+                    <script>
+                        (function() {
+                            const video = document.getElementById('video');
+                            const canvas = document.getElementById('canvas');
+                            const startBtn = document.getElementById('startCameraBtn');
+                            const captureBtn = document.getElementById('captureBtn');
+                            const retakeBtn = document.getElementById('retakeBtn');
+                            const submitBtn = document.getElementById('submitBtn');
+                            const capturedImageInput = document.getElementById('capturedImageInput');
+                            const preview = document.getElementById('capturedImagePreview');
+                            const statusMsg = document.getElementById('statusMsg');
+                            const loadingCamera = document.getElementById('loadingCamera');
+
+                            let stream = null;
+
+                            async function startCamera() {
+                                try {
+                                    statusMsg.textContent = "Requesting camera access...";
+                                    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                                    video.srcObject = stream;
+                                    video.style.display = 'block';
+                                    preview.style.display = 'none';
+                                    loadingCamera.style.display = 'none';
+                                    
+                                    startBtn.style.display = 'none';
+                                    captureBtn.disabled = false;
+                                    statusMsg.textContent = "Camera active. Please maintain a clear view of your face.";
+                                } catch (err) {
+                                    console.error("Error accessing camera: ", err);
+                                    statusMsg.textContent = "Error: Could not access camera. Please allow permissions.";
+                                    statusMsg.className = "text-danger d-block mt-1";
+                                    loadingCamera.style.display = 'none';
+                                }
+                            }
+
+                            startBtn.addEventListener('click', startCamera);
+
+                            captureBtn.addEventListener('click', function() {
+                                if (!stream) return;
+
+                                const context = canvas.getContext('2d');
+                                context.drawImage(video, 0, 0, 320, 240);
+                                
+                                const dataUrl = canvas.toDataURL('image/jpeg');
+                                capturedImageInput.value = dataUrl;
+                                preview.src = dataUrl;
+                                
+                                video.style.display = 'none';
+                                preview.style.display = 'block';
+                                
+                                captureBtn.style.display = 'none';
+                                retakeBtn.style.display = 'inline-block';
+                                submitBtn.disabled = false;
+                                statusMsg.textContent = "Photo captured. Click Confirm to submit.";
+                            });
+
+                            retakeBtn.addEventListener('click', function() {
+                                capturedImageInput.value = '';
+                                preview.style.display = 'none';
+                                video.style.display = 'block';
+                                
+                                captureBtn.style.display = 'inline-block';
+                                retakeBtn.style.display = 'none';
+                                submitBtn.disabled = true;
+                                statusMsg.textContent = "Camera active.";
+                            });
+
+                            // Auto-start camera if possible
+                            startCamera();
+                        })();
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

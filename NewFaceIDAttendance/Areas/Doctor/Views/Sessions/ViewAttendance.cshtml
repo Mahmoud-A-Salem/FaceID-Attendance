@@ -1,0 +1,105 @@
+@model IEnumerable<NewFaceIDAttendance.Models.Attendance>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Session Attendance";
+    var session = ViewBag.Session as NewFaceIDAttendance.Models.Session;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2><i class="fas fa-users me-2"></i>Session Attendance</h2>
+            <p class="text-muted mb-0">
+                <strong>@session.SessionName</strong> - @session.Course.CourseName
+            </p>
+        </div>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Sessions
+        </a>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <small class="text-muted">Start Time</small>
+                    <p class="mb-0"><strong>@session.StartTime.ToString("MMM dd, yyyy hh:mm tt")</strong></p>
+                </div>
+                <div class="col-md-3">
+                    <small class="text-muted">Expiry Time</small>
+                    <p class="mb-0"><strong>@session.ExpiryTime.ToString("MMM dd, yyyy hh:mm tt")</strong></p>
+                </div>
+                <div class="col-md-3">
+                    <small class="text-muted">Total Attendance</small>
+                    <p class="mb-0"><strong class="text-success">@Model.Count()</strong></p>
+                </div>
+                <div class="col-md-3">
+                    <small class="text-muted">Recognized by Face</small>
+                    <p class="mb-0"><strong class="text-primary">@Model.Count(a => a.FaceRecognized == true)</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle me-2"></i>
+            No students have marked attendance for this session yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>University ID</th>
+                        <th>Status</th>
+                        <th>Face Recognized</th>
+                        <th>Attendance Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int counter = 1; }
+                    @foreach (var attendance in Model.OrderBy(a => a.CreatedAt))
+                    {
+                        <tr>
+                            <td>@counter</td>
+                            <td><strong>@attendance.Student?.FullName</strong></td>
+                            <td><span class="badge bg-secondary">@attendance.Student?.UniversityId</span></td>
+                            <td>
+                                @if (attendance.Status == "Present")
+                                {
+                                    <span class="badge bg-success">Present</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">@attendance.Status</span>
+                                }
+                            </td>
+                            <td>
+                                @if (attendance.FaceRecognized == true)
+                                {
+                                    <span class="text-success">
+                                        <i class="fas fa-check-circle"></i> Yes
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">
+                                        <i class="fas fa-times-circle"></i> No
+                                    </span>
+                                }
+                            </td>
+                            <td>@attendance.CreatedAt?.ToString("MMM dd, hh:mm tt")</td>
+                        </tr>
+                        counter++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

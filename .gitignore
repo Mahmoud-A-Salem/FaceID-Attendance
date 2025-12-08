@@ -3,9 +3,15 @@
 ########################################
 
 # Build output
-bin/
-obj/
+**/bin/
+**/obj/
 out/
+
+# Ignored huge binaries
+*.so
+*.dylib
+*.dat
+*.bz2
 
 # VS Code settings (ignore personal stuff, keep shared configs if needed)
 .vscode/*

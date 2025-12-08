@@ -17,6 +17,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddSingleton<NewFaceIDAttendance.Services.FaceRecognitionService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -26,6 +28,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();

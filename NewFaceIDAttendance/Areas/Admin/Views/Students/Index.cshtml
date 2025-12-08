@@ -4,6 +4,30 @@
     Layout = "_AdminLayout";
 }
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-circle"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Warning"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> @TempData["Warning"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <h3>Students</h3>
 <a class="btn btn-primary mb-3" asp-action="Create">Add New Student</a>
 
@@ -28,6 +52,12 @@
                 <td>@student.Department</td>
                 <td>@student.YearLevel</td>
                 <td>
+                    <a class="btn btn-sm btn-info" 
+                       asp-action="AssignCourses" 
+                       asp-route-id="@student.StudentId"
+                       title="Enroll in Courses">
+                        Enroll Courses
+                    </a>
                     <button class="btn btn-sm btn-warning" 
                             data-bs-toggle="modal" 
                             data-bs-target="#editModal"

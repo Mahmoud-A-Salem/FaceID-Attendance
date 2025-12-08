@@ -17,6 +17,9 @@ namespace NewFaceIDAttendance.ViewModels
         [EmailAddress]
         public string? Email { get; set; }
 
+        [StringLength(100, MinimumLength = 6)]
+        public string? Password { get; set; }
+
         [StringLength(15)]
         public string? Phone { get; set; }
 

@@ -1,0 +1,155 @@
+@model NewFaceIDAttendance.ViewModels.StudentDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2><i class="fas fa-tachometer-alt me-2"></i>Student Dashboard</h2>
+        <p class="text-muted">Welcome back, <strong>@Model.Student.FullName</strong>!</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="card border-primary">
+                <div class="card-body text-center">
+                    <i class="fas fa-book fa-3x text-primary mb-2"></i>
+                    <h3>@Model.EnrolledCourses.Count</h3>
+                    <p class="text-muted mb-0">Enrolled Courses</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-success">
+                <div class="card-body text-center">
+                    <i class="fas fa-clipboard-check fa-3x text-success mb-2"></i>
+                    <h3>@Model.TotalAttendance</h3>
+                    <p class="text-muted mb-0">Total Attendance</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card border-warning">
+                <div class="card-body text-center">
+                    <i class="fas fa-clock fa-3x text-warning mb-2"></i>
+                    <h3>@Model.ActiveSessions.Count</h3>
+                    <p class="text-muted mb-0">Active Sessions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Sessions -->
+    @if (Model.ActiveSessions.Any())
+    {
+        <div class="card mb-4 border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Active Sessions - Join Now!
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    @foreach (var session in Model.ActiveSessions)
+                    {
+                        <div class="col-md-6 mb-3">
+                            <div class="card @(session.AlreadyAttended ? "border-success" : "border-warning")">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <span class="badge bg-primary">@session.CourseCode</span>
+                                        @session.CourseName
+                                    </h6>
+                                    <p class="card-text">
+                                        <strong>@session.SessionName</strong>
+                                    </p>
+                                    <p class="mb-2">
+                                        <i class="fas fa-hourglass-end me-1"></i>
+                                        Expires: <strong>@session.ExpiryTime.ToString("hh:mm tt")</strong>
+                                        <span class="text-danger">
+                                            (@Math.Floor(session.TimeRemaining.TotalMinutes) min left)
+                                        </span>
+                                    </p>
+                                    @if (session.AlreadyAttended)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle"></i> Already Attended
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <a href="/Student/Attendance/Join/@session.SessionToken" 
+                                           class="btn btn-warning btn-sm">
+                                            <i class="fas fa-hand-paper me-1"></i>Mark Attendance
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Enrolled Courses -->
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-book me-2"></i>My Courses
+            </h5>
+        </div>
+        <div class="card-body">
+            @if (!Model.EnrolledCourses.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    You are not enrolled in any courses yet.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Doctor</th>
+                                <th>Sessions</th>
+                                <th>Attendance</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var course in Model.EnrolledCourses)
+                            {
+                                <tr>
+                                    <td><span class="badge bg-primary">@course.CourseCode</span></td>
+                                    <td>@course.CourseName</td>
+                                    <td>@(course.DoctorName ?? "N/A")</td>
+                                    <td>@course.TotalSessions</td>
+                                    <td>@course.AttendedSessions / @course.TotalSessions</td>
+                                    <td>
+                                        @if (course.AttendancePercentage >= 75)
+                                        {
+                                            <span class="badge bg-success">@course.AttendancePercentage%</span>
+                                        }
+                                        else if (course.AttendancePercentage >= 50)
+                                        {
+                                            <span class="badge bg-warning text-dark">@course.AttendancePercentage%</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">@course.AttendancePercentage%</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+</div>

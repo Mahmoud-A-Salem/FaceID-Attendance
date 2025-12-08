@@ -1,0 +1,42 @@
+@{
+    ViewData["Title"] = "Attendance Marked";
+}
+
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <div class="card shadow border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>@ViewBag.SuccessTitle
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <i class="fas fa-check-circle fa-4x text-success mb-3"></i>
+                    
+            <p class="lead mb-4">
+                @ViewBag.SuccessMessage
+            </p>
+
+            @if (ViewBag.SessionName != null)
+            {
+                <p><strong>Session:</strong> @ViewBag.SessionName</p>
+            }
+
+            <p><strong>Time:</strong> @(((DateTime)ViewBag.AttendanceTime).ToString("MMM dd, yyyy hh:mm tt"))</p>
+
+                    <hr/>
+
+                    <div class="d-grid gap-2">
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-success">
+                            <i class="fas fa-home me-1"></i>Go to Dashboard
+                        </a>
+                        <a asp-action="MyAttendance" asp-controller="Home" class="btn btn-outline-secondary">
+                            <i class="fas fa-clipboard-list me-1"></i>View My Attendance
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

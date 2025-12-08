@@ -22,4 +22,6 @@ public partial class Course
     public virtual Doctor? Doctor { get; set; }
 
     public virtual ICollection<StudentCourse> StudentCourses { get; set; } = new List<StudentCourse>();
+
+    public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 }

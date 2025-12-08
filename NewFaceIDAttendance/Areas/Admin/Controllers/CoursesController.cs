@@ -74,5 +74,35 @@ namespace NewFaceIDAttendance.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        // GET: ViewStudents
+        public IActionResult ViewStudents(int id)
+        {
+            var course = _context.Courses
+                .Include(c => c.Doctor)
+                .FirstOrDefault(c => c.CourseId == id);
+
+            if (course == null) return NotFound();
+
+            // Get enrolled students for this course
+            var enrolledStudents = _context.StudentCourses
+                .Where(sc => sc.CourseId == id)
+                .Include(sc => sc.Student)
+                .Select(sc => new
+                {
+                    sc.Student.StudentId,
+                    sc.Student.FullName,
+                    sc.Student.UniversityId,
+                    sc.Student.Email,
+                    sc.Student.Department,
+                    sc.Student.YearLevel
+                })
+                .ToList();
+
+            ViewBag.Course = course;
+            ViewBag.EnrolledStudents = enrolledStudents;
+
+            return View();
+        }
     }
 }

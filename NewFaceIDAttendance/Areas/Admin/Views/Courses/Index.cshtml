@@ -26,6 +26,12 @@
                 <td>@(course.Doctor?.FullName ?? "No Doctor Assigned")</td>
                 <td>@course.YearLevel</td>
                 <td>
+                    <a class="btn btn-sm btn-info" 
+                       asp-action="ViewStudents" 
+                       asp-route-id="@course.CourseId"
+                       title="View Enrolled Students">
+                        View Students
+                    </a>
                     <button class="btn btn-sm btn-warning" 
                             data-bs-toggle="modal" 
                             data-bs-target="#editModal"

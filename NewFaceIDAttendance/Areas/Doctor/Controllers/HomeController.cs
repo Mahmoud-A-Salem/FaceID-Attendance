@@ -43,7 +43,7 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
                 DoctorName = doctor.FullName,
                 AssignedCourses = doctor.Courses.ToList(),
                 TotalCourses = doctor.Courses.Count,
-                TotalStudents = doctor.Courses.Sum(c => c.StudentCourses.Count) 
+                TotalStudents = doctor.Courses.Sum(c => c.StudentCourses.Count)
                 // Note: This sums enrollments. Unique students across courses would require distinct count if needed.
             };
 
@@ -69,13 +69,11 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
             }
 
             // Calculate Stats
-            // Assuming "TotalSessions" is the number of distinct dates attendance was taken for this course
-            // or we can count based on a specific logic. Here I'll interpret unique dates in Attendance table as sessions.
             var totalSessions = await _context.Attendances
-                .Where(a => a.CourseId == id)
-                .Select(a => a.CreatedAt.Value.Date) 
-                .Distinct()
-                .CountAsync();
+             .Where(a => a.CourseId == id)
+             .Select(a => a.SessionId)
+             .Distinct()
+             .CountAsync();
 
             var studentViewModels = new List<StudentAttendanceViewModel>();
 
@@ -91,7 +89,7 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
                 // Calculate attendance from the loaded Attendances collection (filtered in memory for this student)
                 // Note: Ensure Attendances are loaded. We did Include(c => c.Attendances).
                 // Better approach might be filtering at query level if data is large, but for now in-memory is okay for reasonable sizes.
-                
+
                 var studentAttendances = course.Attendances
                     .Where(a => a.StudentId == sc.StudentId)
                     .ToList();
@@ -148,7 +146,7 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
             // Fetch distinct students enrolled in ANY of this doctor's courses
             // And maybe calculate some aggregate stats if needed, or just list them.
             // For now, let's just list them.
-            
+
             var doctorCourses = await _context.Courses
                 .Where(c => c.DoctorId == doctorId)
                 .Select(c => c.CourseId)

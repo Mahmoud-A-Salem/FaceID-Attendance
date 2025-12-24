@@ -123,13 +123,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @{ int index = 0; }
                                 @foreach (var course in availableCourses)
                                 {
                                     <tr>
                                         <td>
                                             <input type="checkbox" 
-                                                   name="SelectedCourses[@index]" 
+                                                   name="SelectedCourses" 
                                                    value="@course.CourseId" 
                                                    class="form-check-input course-checkbox"
                                                    id="course_@course.CourseId">
@@ -156,7 +155,6 @@
                                             }
                                         </td>
                                     </tr>
-                                    index++;
                                 }
                             </tbody>
                         </table>

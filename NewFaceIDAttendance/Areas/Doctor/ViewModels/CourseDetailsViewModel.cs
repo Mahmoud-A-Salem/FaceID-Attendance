@@ -13,6 +13,7 @@ namespace NewFaceIDAttendance.Areas.Doctor.ViewModels
         public string CourseName { get; set; }
         public string CourseCode { get; set; }
         public int TotalSessions { get; set; }
+        public double AverageAttendancePercentage { get; set; }
         public List<StudentAttendanceViewModel> Students { get; set; }
     }
 

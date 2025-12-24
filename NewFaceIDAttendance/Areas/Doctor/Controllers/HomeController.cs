@@ -69,13 +69,21 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
             }
 
             // Calculate Stats
-            // Assuming "TotalSessions" is the number of distinct dates attendance was taken for this course
-            // or we can count based on a specific logic. Here I'll interpret unique dates in Attendance table as sessions.
-            var totalSessions = await _context.Attendances
-                .Where(a => a.CourseId == id)
-                .Select(a => a.CreatedAt.Value.Date) 
-                .Distinct()
+            // Use logical sessions from the database
+            var totalSessions = await _context.Sessions.CountAsync(s => s.CourseId == id);
+            
+            // Calculate Total Attendance (Present)
+            var totalPresent = await _context.Attendances
+                .Where(a => a.CourseId == id && a.Status == "Present")
                 .CountAsync();
+
+            var totalStudents = course.StudentCourses.Count;
+            
+            double averageAttendance = 0;
+            if (totalSessions > 0 && totalStudents > 0)
+            {
+                averageAttendance = Math.Round((double)totalPresent / (totalStudents * totalSessions) * 100, 1);
+            }
 
             var studentViewModels = new List<StudentAttendanceViewModel>();
 
@@ -121,6 +129,7 @@ namespace NewFaceIDAttendance.Areas.Doctor.Controllers
                 CourseName = course.CourseName,
                 CourseCode = course.CourseCode,
                 TotalSessions = totalSessions,
+                AverageAttendancePercentage = averageAttendance,
                 Students = studentViewModels
             };
 

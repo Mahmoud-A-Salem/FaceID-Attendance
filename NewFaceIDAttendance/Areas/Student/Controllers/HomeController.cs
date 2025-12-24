@@ -45,7 +45,8 @@ namespace NewFaceIDAttendance.Areas.Student.Controllers
                     TotalSessions = _context.Sessions.Count(s => s.CourseId == sc.Course.CourseId),
                     AttendedSessions = _context.Attendances.Count(a => 
                         a.StudentId == student.StudentId && 
-                        a.CourseId == sc.Course.CourseId),
+                        a.CourseId == sc.Course.CourseId &&
+                        a.Status == "Present"),
                     AttendancePercentage = CalculateAttendancePercentage(
                         student.StudentId, 
                         sc.Course.CourseId)
@@ -82,7 +83,7 @@ namespace NewFaceIDAttendance.Areas.Student.Controllers
                 Student = student,
                 EnrolledCourses = enrolledCourses,
                 ActiveSessions = activeSessions,
-                TotalAttendance = _context.Attendances.Count(a => a.StudentId == student.StudentId)
+                TotalAttendance = _context.Attendances.Count(a => a.StudentId == student.StudentId && a.Status == "Present")
             };
 
             return View(model);
@@ -116,7 +117,8 @@ namespace NewFaceIDAttendance.Areas.Student.Controllers
                     TotalSessions = _context.Sessions.Count(s => s.CourseId == sc.Course.CourseId),
                     AttendedSessions = _context.Attendances.Count(a => 
                         a.StudentId == student.StudentId && 
-                        a.CourseId == sc.Course.CourseId),
+                        a.CourseId == sc.Course.CourseId &&
+                        a.Status == "Present"),
                     AttendancePercentage = CalculateAttendancePercentage(
                         student.StudentId, 
                         sc.Course.CourseId)
@@ -182,7 +184,8 @@ namespace NewFaceIDAttendance.Areas.Student.Controllers
 
             var attendedSessions = _context.Attendances.Count(a => 
                 a.StudentId == studentId && 
-                a.CourseId == courseId);
+                a.CourseId == courseId &&
+                a.Status == "Present");
 
             return (int)Math.Round((double)attendedSessions / totalSessions * 100);
         }

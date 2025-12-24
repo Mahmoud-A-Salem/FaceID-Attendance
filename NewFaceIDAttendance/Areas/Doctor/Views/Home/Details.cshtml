@@ -38,7 +38,7 @@
             <div class="card-body">
                 <h6 class="text-muted text-uppercase mb-2">Average Attendance</h6>
                 @{
-                    var avgAttendance = Model.Students.Any() ? Math.Round(Model.Students.Average(s => s.AttendancePercentage), 1) : 0;
+                    var avgAttendance = Model.AverageAttendancePercentage;
                     var colorClass = avgAttendance >= 75 ? "text-success" : (avgAttendance >= 50 ? "text-warning" : "text-danger");
                 }
                 <div class="fs-4 fw-bold @colorClass">@avgAttendance%</div>
@@ -60,7 +60,7 @@
                     <th>University ID</th>
                     <th class="text-center">Attendance %</th>
                     <th class="text-center">Status</th>
-                    <th class="text-end pe-4">Actions</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -95,10 +95,7 @@
                                 <span class="badge bg-soft-danger text-danger rounded-pill px-3">Critical</span>
                             }
                         </td>
-                        <td class="text-end pe-4">
-                            <!-- Placeholder for student specific history -->
-                            <button class="btn btn-sm btn-light text-muted" title="View History"><i class="fas fa-history"></i></button>
-                        </td>
+                        
                     </tr>
                 }
             </tbody>
